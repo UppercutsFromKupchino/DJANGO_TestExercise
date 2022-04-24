@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+    <div class="cap-links">
+        <a href="{% url 'index' %}">Домашняя страница</a>
+        <a href="{% url 'login' %}">Авторизация</a>
+    </div>
+    <div class="messages-reg">
+        {% if messages %}
+        <ul class="messages-list">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <p>Тут будет регистрация</p>
+    {{ registration_form.non_field_errors }}
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div class="reg-form">
+            <div class="reg-email">
+                {{ registration_form.email.errors }}
+                {{ registration_form.email.label_tag }}
+                {{ registration_form.email }}
+            </div>
+            <div class="reg-password">
+                {{ registration_form.password.errors }}
+                {{ registration_form.password.label_tag }}
+                {{ registration_form.password }}
+            </div>
+            <div class="reg-fio">
+                {{ registration_form.fio.errors }}
+                {{ registration_form.fio.label_tag }}
+                {{ registration_form.fio }}
+            </div>
+            <button type="submit">Зарегистрироваться</button>
+        </div>
+    </form>
+</body>
+</html>
