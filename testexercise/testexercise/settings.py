@@ -50,6 +50,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SESSIONS_ENGINE = [
+    "django.contrib.sessions.backends.signed_cookies"
+]
+
 ROOT_URLCONF = 'testexercise.urls'
 
 TEMPLATES = [

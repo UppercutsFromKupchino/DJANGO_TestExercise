@@ -5,9 +5,38 @@
     <title>Авторизация</title>
 </head>
 <body>
+    <div class="cap-links">
+        <a href="{% url 'index' %}">Домашняя страница</a>
+        <a href="{% url 'register' %}">Регистрация</a>
+    </div>
+    <div class="messages-reg">
+        {% if messages %}
+        <ul class="messages-list">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
     <p>Тут будет авторизация</p>
     <div class="login-form">
         {{ form.non_field_errors }}
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="login-form">
+                <div class="login-email">
+                    {{ login_form.email.errors }}
+                    {{ login_form.email.label_tag }}
+                    {{ login_form.email }}
+                </div>
+                <div class="login-password">
+                    {{ login_form.password.errors }}
+                    {{ login_form.password.label_tag }}
+                    {{ login_form.password }}
+                </div>
+                <button type="submit">Авторизация</button>
+            </div>
+        </form>
     </div>
 </body>
 </html>
