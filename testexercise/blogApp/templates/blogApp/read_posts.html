@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Открытые статьи</title>
+</head>
+<body>
+    <div class="cap-links">
+        <a href="{% url 'index' %}">Домашняя страница</a>
+        <a href="{% url 'register' %}">Регистрация</a>
+        {% if 'loggedin' not in request.session %}
+        <a href="{% url 'login' %}">Авторизация</a>
+        {% endif %}
+    </div>
+    <div class="messages-reg">
+        {% if messages %}
+        <ul class="messages-list">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <p>Если вы не авторизированы, вы можете видеть эти статьи</p>
+    {% for post in posts %}
+    <div class="posts">
+        <hr>
+        <p>Дата добавления статьи - {{ post.datetime_of_post }}</p>
+        <p>Статью написал {{ post.fio_of_user }}</p>
+        <p>Текст статьи - {{ post.text_of_post }}</p>
+        <hr>
+    </div>
+    {% endfor %}
+</body>
+</html>

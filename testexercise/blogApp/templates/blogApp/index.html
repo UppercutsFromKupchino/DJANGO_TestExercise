@@ -10,7 +10,9 @@
         <a href="{% url 'login' %}">Авторизация</a>
         {% endif %}
         <a href="{% url 'register' %}">Регистрация</a>
-        {% if 'role' in request.session and context.role == "1" %}
+        <a href="{% url 'read_posts' 2 %}">Открытые статьи</a>
+        <a href="{% url 'read_posts' 1 %}">Закрытые статьи</a>
+        {% if role == 1 %}
         <a href="{% url 'write_post' %}">Написать статью</a>
         {% endif %}
         {% if 'loggedin' in request.session %}

@@ -12,7 +12,7 @@ from .exceptions import *
 
 # Index page
 def index(request):
-    if 'loggedin' in request.session:
+    if 'loggedin' in request.session and request.session['role'] == 1:
         context = {
             'role': request.session['role']
         }
@@ -114,6 +114,26 @@ def write_post(request):
     else:
         messages.success(request, "У вас недостаточно прав, чтобы посещать данную страницу")
         return redirect('index')
+
+
+# Страница со статьями для неавторизированных пользователей
+def read_posts(request, status):
+    if 'loggedin' not in request.session and status == 1:  # Неавторизированный юзер смотрит закрытые статьи
+        messages.error(request, "У вас недостаточно прав, чтобы посещать данную страницу")
+        return redirect('index')
+    else:
+        posts = Post.objects.raw(f"""SELECT * FROM post LEFT JOIN _user_ ON post.id_of_author=_user_.id_of_user WHERE 
+                                     post.id_of_status={status}""")
+        if 'loggedin' not in request.session:
+            context = {
+                'posts': posts
+            }
+        else:
+            context = {
+                'posts': posts,
+                'role': request.session['role']  # Если пользователь - автор, роль - 1, добавляются кнопки удалить и редактировать
+            }
+        return render(request, 'blogApp/read_posts.html', context)
 
 
 # Выход из системы
