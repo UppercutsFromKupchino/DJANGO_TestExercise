@@ -1,1 +1,1 @@
-web: gunicorn testexercise.testexercise.wsgi
+web: gunicorn testexercise.wsgi
