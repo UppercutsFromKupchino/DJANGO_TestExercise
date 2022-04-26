@@ -1,1 +1,1 @@
-web: gunicorn testexercise.wsgi
+web: gunicorn blogApp.wsgi
