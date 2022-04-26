@@ -80,6 +80,7 @@ WSGI_APPLICATION = 'testexercise.wsgi.application'
 
 DATABASES = {
     'default': {
+        'CONN_MAX_AGE': 500,
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'DJANGO_TestExercise',
         'USER': 'postgres',
