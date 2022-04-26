@@ -83,10 +83,10 @@ DATABASES = {
     'default': {
         'CONN_MAX_AGE': 500,
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'DJANGO_TestExercise',
-        'USER': 'postgres',
-        'PASSWORD': 'alp37327',
-        'HOST': '127.0.0.1',
+        'NAME': 'd4rg02klrs91f7',
+        'USER': 'czlbmsjirjmyeb',
+        'PASSWORD': '155526f376733da40f5c8cfce3e035de1fc8896c32e40665089f68a59e0ee80c',
+        'HOST': 'ec2-63-32-248-14.eu-west-1.compute.amazonaws.com',
         'PORT': '5432'
     }
 }
