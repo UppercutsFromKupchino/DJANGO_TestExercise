@@ -1,36 +1,48 @@
+import datetime
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password, check_password
+# from django.contrib.auth.hashers import make_password, check_password
 
-from blogApp.forms import *
-from blogApp.models import *
-from blogApp.exceptions import *
+from .forms import *
+from .models import *
+from .exceptions import *
 
 
 # Index page
 def index(request):
-    return render(request, 'blogApp/index.html')
+    if 'loggedin' in request.session:
+        context = {
+            'role': request.session['role']
+        }
+        return render(request, 'blogApp/index.html', context)
+    else:
+        return render(request, 'blogApp/index.html')
 
 
 # Страница авторизации
 def login(request):
     if request.method == 'POST':
+        # print(request.META['HTTP_AUTHORIZATION'])
+        # Здесь будет Basic Auth
         context = {
             'login_form': LoginForm(request.POST),
             'email': request.POST['email'],
             'password': request.POST['password']
         }
+
         email = context['email']
-        user = User.objects.filter(email_of_user=email)
-        if user:
+        user = User.objects.filter(email_of_user=email)  # Получение пользователя из базы данных
+
+        if user:  # Проверка на наличие пользователя
             password = user[0].password_of_user
-            if check_password(context['password'], password):
-                request.session['loggedin'] = True
-                request.session['id'] = user[0].id_of_user
+            if context['password'] == password:  # Проверка на совпадение пароля
+                request.session['loggedin'] = True  # 'loggedin' in request.session - авторизация пользователя
+                request.session['id'] = int(user[0].id_of_user)
                 role_id = user[0].id_of_role
-                request.session['role'] = role_id.id_of_role
-                return HttpResponseRedirect('index')
+                request.session['role'] = int(role_id.id_of_role)
+                return redirect('index')
             else:
                 messages.success(request, "Пароль неверный")
         else:
@@ -56,20 +68,57 @@ def register(request):
             'password': request.POST['password'],
             'fio': request.POST['fio']
         }
-        if ValidationError.validate(ValidationError.pattern, context['password']):
+        if ValidationError.validate(ValidationError.pattern, context['password']):  # Проверка пароля на символы
             messages.success(request, """Пароль должен содержать хотя бы одну цифру, одну букву верхнего и
                                          одну букву нижнего регистра.""")
             return redirect('register')
         else:
             User.objects.create(email_of_user=context['email'],
-                                password_of_user=make_password(context['password']),
+                                password_of_user=context['password'],
                                 fio_of_user=context['fio'],
                                 id_of_role=RoleOfUser.objects.get(id_of_role=2))
             return redirect('login')
 
     else:
-        statuses = Status.objects.all()
-    context = {
-        'registration_form': RegisterForm()
-    }
-    return render(request, 'blogApp/register.html', context)
+        context = {
+            'registration_form': RegisterForm()
+        }
+        return render(request, 'blogApp/register.html', context)
+
+
+# Написать статью
+def write_post(request):
+    if 'loggedin' in request.session and request.session['role'] == 1:
+        if request.method == 'POST':
+            print(request.POST['status'])
+            context = {
+                'write_post_form': WritePostForm(request.POST),
+                'status': request.POST['status'],
+                'text': request.POST['text']
+            }
+            # try:
+            Post.objects.create(text_of_post=context['text'],
+                                id_of_author=User.objects.get(id_of_user=request.session['id']),
+                                datetime_of_post=datetime.datetime.now(),
+                                id_of_status=Status.objects.get(id_of_status=context['status']))
+            messages.success(request, "Запись добавлена успешно")
+            return redirect('write_post')
+            # except:
+            #     messages.error(request, "Ошибка взаимодействия с базой данных")
+            #     return redirect('write_post')
+        else:
+            context = {
+                'write_post_form': WritePostForm()
+            }
+            return render(request, 'blogApp/write_post.html', context)
+    else:
+        messages.success(request, "У вас недостаточно прав, чтобы посещать данную страницу")
+        return redirect('index')
+
+
+# Выход из системы
+def logout(request):
+    request.session.pop('id')
+    request.session.pop('loggedin')
+    request.session.pop('role')
+    return redirect('index')

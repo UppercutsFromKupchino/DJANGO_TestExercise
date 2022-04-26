@@ -6,8 +6,25 @@
 </head>
 <body>
     <div class="cap-links">
+        {% if 'loggedin' not in request.session %}
         <a href="{% url 'login' %}">Авторизация</a>
+        {% endif %}
         <a href="{% url 'register' %}">Регистрация</a>
+        {% if 'role' in request.session and context.role == "1" %}
+        <a href="{% url 'write_post' %}">Написать статью</a>
+        {% endif %}
+        {% if 'loggedin' in request.session %}
+        <a href="{% url 'logout' %}">Выйти из системы</a>
+        {% endif %}
+    </div>
+    <div class="messages-reg">
+        {% if messages %}
+        <ul class="messages-list">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
     <div class="word">
         <p>Добро пожаловать!</p>

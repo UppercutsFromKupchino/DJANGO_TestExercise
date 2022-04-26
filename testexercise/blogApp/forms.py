@@ -1,5 +1,5 @@
 from django import forms
-from blogApp.models import *
+from .models import *
 
 
 # Форма регистрации
@@ -13,3 +13,9 @@ class RegisterForm(forms.Form):
 class LoginForm(forms.Form):
     email = forms.EmailField(label="Электронная почта", required=True)
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput(), required=True)
+
+
+# Форма для написания статьи
+class WritePostForm(forms.Form):
+    status = forms.ModelChoiceField(queryset=Status.objects.all())
+    text = forms.CharField(label="Текст статьи", required=True)

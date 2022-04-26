@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Напишите свою статью</title>
+</head>
+<body>
+    <div class="cap-links">
+        <a href="{% url 'index' %}">Домашняя страница</a>
+        <a href="{% url 'register' %}">Регистрация</a>
+        <a href="{% url 'logout' %}">Выйти из системы</a>
+    </div>
+    <div class="messages-reg">
+        {% if messages %}
+        <ul class="messages-list">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div class="write-post-form">
+        {{ write_post_form.non_field_errors }}
+        <form action="{% url 'write_post' %}" method="post">
+            {% csrf_token %}
+            <div class="write-post-form">
+                <div class="login-email">
+                    {{ write_post_form.status.errors }}
+                    {{ write_post_form.status.label_tag }}
+                    {{ write_post_form.status }}
+                </div>
+                <div class="login-password">
+                    {{ write_post_form.text.errors }}
+                    {{ write_post_form.text.label_tag }}
+                    {{ write_post_form.text }}
+                </div>
+                <button type="submit">Добавить статью</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
