@@ -131,7 +131,7 @@ def read_posts(request, status):
         else:
             context = {
                 'posts': posts,
-                'role': request.session['role']  # Если пользователь - автор, роль - 1, добавляются кнопки удалить и редактировать
+                'role': request.session['role']  # Если пользователь - автор, роль - 1, добавляются(ещё нет) кнопки удалить и редактировать
             }
         return render(request, 'blogApp/read_posts.html', context)
 
