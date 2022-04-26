@@ -1,1 +1,1 @@
-web: gunicorn testexercise.testexercise.wsgi
+web: gunicorn manage.py runserver 0.0.0.0:5000
