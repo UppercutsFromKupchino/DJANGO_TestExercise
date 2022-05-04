@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u8ta$5y%n3v-v5u4zlep54^xu(ixsdjvvcn9=#==ig1@3tasm5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -91,6 +91,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'CONN_MAX_AGE': 500,
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'DJANGO_TestExercise',
+#         'USER': 'postgres',
+#         'PASSWORD': 'alp37327',
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
+# }
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
